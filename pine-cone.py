@@ -109,7 +109,11 @@ headers = next(df.iterrows())[0]
 df=pd.read_csv('processed/initial.csv', low_memory=False, header=1)
 
 pbar = tqdm(df.iterrows(),  desc="Progress bar: ")
+cnt= 0
 for row in pbar:
+    cnt+=1
+    if(cnt<2500):
+        continue
     text=''
     shortened=[]
     for index, header_cell in enumerate(headers):
