@@ -112,7 +112,7 @@ pbar = tqdm(df.iterrows(),  desc="Progress bar: ")
 cnt= 0
 for row in pbar:
     cnt+=1
-    if(cnt<2500):
+    if(cnt<5660):
         continue
     text=''
     shortened=[]
@@ -135,9 +135,15 @@ for row in pbar:
         shortened.append( text )
     upsert_data = []
     for index, data in enumerate(shortened):
+        embedding=[]
+        try:
+            embedding = openai.Embedding.create(input=data, engine=MODEL)['data'][0]['embedding']
+        except :
+            embedding = openai.Embedding.create(input=data, engine=MODEL)['data'][0]['embedding']
+
         upsert_data.append((
             str(row[1]["Unique ID"])+ "-" + str(index),
-            openai.Embedding.create(input=data, engine=MODEL)['data'][0]['embedding'],
+            embedding,
             {"text" : data}
         ))
     pine_index.upsert(vectors=upsert_data)
