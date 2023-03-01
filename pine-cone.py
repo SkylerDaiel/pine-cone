@@ -112,7 +112,7 @@ pbar = tqdm(df.iterrows(),  desc="Progress bar: ")
 cnt= 0
 for row in pbar:
     cnt+=1
-    if(cnt<5660):
+    if(cnt<11700):
         continue
     text=''
     shortened=[]
