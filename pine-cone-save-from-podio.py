@@ -109,12 +109,16 @@ def retrun_values(field):
             return field['values'][0]['value']
         
 page_cnt=0
-item_cnt_per_page=20
+item_cnt_per_page=50
 total=podio.Item.filter(int(app_id),attributes={})['total']
 print(total)
 
+cnt= 0
 
 for offset in tqdm(range(0, total, item_cnt_per_page)):
+    cnt+=1
+    if(cnt<11):
+        continue
     items=get_items(app_id, limit=item_cnt_per_page, offset=offset)
     vectors=[]
     pbar = tqdm(items)
