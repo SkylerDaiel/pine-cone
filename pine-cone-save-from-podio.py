@@ -64,7 +64,10 @@ def get_items(app_id, limit, offset):
     })['items']
 
 def set_item(id, new_value):
-    text= f"Now the stage for {new_value['Customer Full Name']} is {new_value['Stage']}"
+    if new_value['Stage'] is not None:
+        text= f"Now the stage for {new_value['Customer Full Name']} is {new_value['Stage']}"
+    else:
+        text= f"Now the stage for {new_value['Customer Full Name']} is none"
     embedding=[]
     try:
         embedding = openai.Embedding.create(input=text, engine=MODEL)['data'][0]['embedding']
@@ -117,7 +120,7 @@ cnt= 0
 
 for offset in tqdm(range(0, total, item_cnt_per_page)):
     cnt+=1
-    if(cnt<11):
+    if(cnt<16):
         continue
     items=get_items(app_id, limit=item_cnt_per_page, offset=offset)
     vectors=[]
