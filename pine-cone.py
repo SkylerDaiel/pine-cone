@@ -163,5 +163,5 @@ for row in pbar:
     pine_index.upsert(vectors=[{
         "id": str(row[1]['PROJECT ID']),
         'values': embedding,
-        'metadata': data
+        'metadata': {"text": data['PROJECT ID']}
     }])
