@@ -156,10 +156,10 @@ for row in pbar:
     #     ))
     embedding=[]
     try:
-        embedding = openai.Embedding.create(input=data, engine=MODEL)['data'][0]['embedding']
+        embedding = openai.Embedding.create(input=text, engine=MODEL)['data'][0]['embedding']
     except :
-        embedding = openai.Embedding.create(input=data, engine=MODEL)['data'][0]['embedding']
-    
+        embedding = openai.Embedding.create(input=text, engine=MODEL)['data'][0]['embedding']
+
     pine_index.upsert(vectors=[{
         "id": str(row[1]['PROJECT ID']),
         'values': embedding,
