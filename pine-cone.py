@@ -116,7 +116,7 @@ pbar = tqdm(df.iterrows(),  desc="Progress bar: ")
 cnt= 0
 for row in pbar:
     cnt+=1
-    if(cnt<11700):
+    if(cnt<0):
         continue
     text = f"Now the stage for {row[1]['Customer Full Name']} is {row[1]['Stage']}"
     # text=""
