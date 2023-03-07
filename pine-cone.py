@@ -105,9 +105,9 @@ def split_into_many(text, max_tokens = max_tokens):
 
     return chunks
 
-# headers=[]
-# df=pd.read_csv('processed/initial.csv', low_memory=False)
-# headers = next(df.iterrows())[0]
+headers=[]
+df=pd.read_csv('processed/initial.csv', low_memory=False)
+headers = next(df.iterrows())[0]
 
 
 df=pd.read_csv('processed/initial.csv', low_memory=False, header=1)
@@ -119,6 +119,10 @@ for row in pbar:
     if(cnt<0):
         continue
     text = f"Now the stage for {row[1]['Customer Full Name']} is {row[1]['Stage']}"
+    data={}
+    print(text)
+    for index, header_cell in enumerate(headers):
+        data[header_cell]=row[1][header_cell]
     # text=""
     # shortened=[]
     # for index, header_cell in enumerate(headers):
@@ -152,7 +156,7 @@ for row in pbar:
     #         {"text" : data}
     #     ))
     pine_index.upsert(vectors=[{
-        "id": id,
+        "id": str(row[1]['PROJECT ID']),
         'values': openai.Embedding.create(input=text, engine=MODEL)['data'][0]['embedding'],
-        'metadata': row[1]
+        'metadata': data
     }])
