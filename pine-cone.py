@@ -120,7 +120,6 @@ for row in pbar:
         continue
     text = f"Now the stage for {row[1]['Customer Full Name']} is {row[1]['Stage']}"
     data={}
-    print(text)
     for index, header_cell in enumerate(headers):
         data[header_cell]=row[1][header_cell]
     # text=""
@@ -155,8 +154,14 @@ for row in pbar:
     #         embedding,
     #         {"text" : data}
     #     ))
+    embedding=[]
+    try:
+        embedding = openai.Embedding.create(input=data, engine=MODEL)['data'][0]['embedding']
+    except :
+        embedding = openai.Embedding.create(input=data, engine=MODEL)['data'][0]['embedding']
+    
     pine_index.upsert(vectors=[{
         "id": str(row[1]['PROJECT ID']),
-        'values': openai.Embedding.create(input=text, engine=MODEL)['data'][0]['embedding'],
+        'values': embedding,
         'metadata': data
     }])
