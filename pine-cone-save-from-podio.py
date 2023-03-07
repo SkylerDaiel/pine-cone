@@ -64,7 +64,7 @@ def get_items(app_id, limit, offset):
     })['items']
 
 def set_item(id, new_value):
-    if new_value['Stage'] is not None:
+    if hasattr(new_value, 'Stage'):
         text= f"Now the stage for {new_value['Customer Full Name']} is {new_value['Stage']}"
     else:
         text= f"Now the stage for {new_value['Customer Full Name']} is none"
