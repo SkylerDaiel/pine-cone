@@ -38,8 +38,12 @@ if 'podiodata' not in pinecone.list_indexes():
 
     # extract embeddings to a list
     embeds = [record['embedding'] for record in res['data']]
-    pinecone.create_index('podiodata', dimension=len(embeds[0]))
-
+    try:
+        pinecone.create_index('podiodata', dimension=len(embeds[0]))
+        print('created index')
+    except:
+        print('error')
+        
 pine_index = pinecone.Index("podiodata")
 
 
@@ -101,9 +105,9 @@ def split_into_many(text, max_tokens = max_tokens):
 
     return chunks
 
-headers=[]
-df=pd.read_csv('processed/initial.csv', low_memory=False)
-headers = next(df.iterrows())[0]
+# headers=[]
+# df=pd.read_csv('processed/initial.csv', low_memory=False)
+# headers = next(df.iterrows())[0]
 
 
 df=pd.read_csv('processed/initial.csv', low_memory=False, header=1)
@@ -114,36 +118,41 @@ for row in pbar:
     cnt+=1
     if(cnt<11700):
         continue
-    text=''
-    shortened=[]
-    for index, header_cell in enumerate(headers):
-        if(header_cell != 'Customer Full Name'):
-            value = str(row[1][header_cell])
-            customer_fullname= str(row[1]['Customer Full Name'])
-            text += descrption(header_cell, customer_fullname, value) +"."
+    text = f"Now the stage for {row[1]['Customer Full Name']} is {row[1]['Stage']}"
+    # text=""
+    # shortened=[]
+    # for index, header_cell in enumerate(headers):
+    #     if(header_cell != 'Customer Full Name'):
+    #         value = str(row[1][header_cell])
+    #         customer_fullname= str(row[1]['Customer Full Name'])
+    #         text += descrption(header_cell, customer_fullname, value) +"."
 
     # If the text is None, go to the next row
-    if text is None:
-        continue
+    # if text is None:
+    #     continue
 
-    # If the number of tokens is greater than the max number of tokens, split the text into chunks
-    if len(tokenizer.encode(text)) > max_tokens:
-        shortened += split_into_many(text)
+    # # If the number of tokens is greater than the max number of tokens, split the text into chunks
+    # if len(tokenizer.encode(text)) > max_tokens:
+    #     shortened += split_into_many(text)
     
-    # Otherwise, add the text to the list of shortened texts
-    else:
-        shortened.append( text )
-    upsert_data = []
-    for index, data in enumerate(shortened):
-        embedding=[]
-        try:
-            embedding = openai.Embedding.create(input=data, engine=MODEL)['data'][0]['embedding']
-        except :
-            embedding = openai.Embedding.create(input=data, engine=MODEL)['data'][0]['embedding']
+    # # Otherwise, add the text to the list of shortened texts
+    # else:
+    #     shortened.append( text )
+    # upsert_data = []
+    # for index, data in enumerate(shortened):
+    #     embedding=[]
+    #     try:
+    #         embedding = openai.Embedding.create(input=data, engine=MODEL)['data'][0]['embedding']
+    #     except :
+    #         embedding = openai.Embedding.create(input=data, engine=MODEL)['data'][0]['embedding']
 
-        upsert_data.append((
-            str(row[1]["Unique ID"])+ "-" + str(index),
-            embedding,
-            {"text" : data}
-        ))
-    pine_index.upsert(vectors=upsert_data)
+    #     upsert_data.append((
+    #         str(row[1]["Unique ID"])+ "-" + str(index),
+    #         embedding,
+    #         {"text" : data}
+    #     ))
+    pine_index.upsert(vectors=[{
+        "id": id,
+        'values': openai.Embedding.create(input=text, engine=MODEL)['data'][0]['embedding'],
+        'metadata': row[1]
+    }])
