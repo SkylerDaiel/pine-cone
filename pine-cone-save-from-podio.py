@@ -123,7 +123,7 @@ cnt= 0
 
 for offset in tqdm(range(0, total, item_cnt_per_page)):
     cnt+=1
-    if(cnt<61):
+    if(cnt<501):
         continue
     items=get_items(app_id, limit=item_cnt_per_page, offset=offset)
     vectors=[]
