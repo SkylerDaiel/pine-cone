@@ -65,6 +65,7 @@ def get_items(app_id, limit, offset):
 
 def set_item(id, new_value):
     text=''
+    print('Exist', 'Stage' in new_value)
     if 'Stage' in new_value & 'Customer Full Name' in new_value:
         text= f"Now the stage for {new_value['Customer Full Name']} is {new_value['Stage']}"
     elif 'Stage' in new_value == False &'Customer Full Name' in new_value:
@@ -131,7 +132,6 @@ for offset in tqdm(range(0, total, item_cnt_per_page)):
     for item in pbar:
         id=item['item_id']
         values= all_values(item['fields'])
-        print(type(values))
         vector=set_item("id-"+str(id), values)
         if vector is False:
             continue
