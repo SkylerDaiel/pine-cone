@@ -64,9 +64,10 @@ def get_items(app_id, limit, offset):
     })['items']
 
 def set_item(id, new_value):
-    if hasattr(new_value, 'Stage') & hasattr(new_value, 'Customer Full Name'):
+    text=''
+    if 'Stage' in new_value & 'Customer Full Name' in new_value:
         text= f"Now the stage for {new_value['Customer Full Name']} is {new_value['Stage']}"
-    elif hasattr(new_value, 'Stage') == False & hasattr(new_value, 'Customer Full Name'):
+    elif 'Stage' in new_value == False &'Customer Full Name' in new_value:
         text= f"Now the stage for {new_value['Customer Full Name']} is none"
     else:
         return False
