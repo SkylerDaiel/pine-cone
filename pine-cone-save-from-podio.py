@@ -103,7 +103,7 @@ def all_values(fields):
 def retrun_values(field):
     # print(field['label'],field['type'], ' :',field['values'][0])
     match(field['label']):
-        case "Date Created" | "? Install Complete Date" | "MTRX NTP Approved Date":
+        case "Date Created" | "? Install Complete Date" | "MTRX NTP Approved Date" | "CCA Date":
             return field['values'][0]['start']
         # case "Stage" | "Warehouse territory" | "Status" | "? MTRX Install Status" | "Finance Type" | "Deal Status (Sales)" | "Welcome Call Checklist" | "HOA Approval Required?":
         #     return field['values'][0]['value']['text']
