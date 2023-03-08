@@ -131,6 +131,7 @@ for offset in tqdm(range(0, total, item_cnt_per_page)):
     for item in pbar:
         id=item['item_id']
         values= all_values(item['fields'])
+        print(type(values))
         vector=set_item("id-"+str(id), values)
         if vector is False:
             continue
