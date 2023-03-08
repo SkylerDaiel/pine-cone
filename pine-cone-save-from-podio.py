@@ -76,6 +76,7 @@ def set_item(id, new_value):
         embedding = openai.Embedding.create(input=text, engine=MODEL)['data'][0]['embedding']
     except :
         embedding = openai.Embedding.create(input=text, engine=MODEL)['data'][0]['embedding']
+    new_value['text']=text
     return {
         "id": id,
         "values": embedding,
@@ -137,5 +138,7 @@ for offset in tqdm(range(0, total, item_cnt_per_page)):
         vectors.append(vector)
         time.sleep(0.001)
         pbar.set_description("Processing %s")
-
-    pine_index.upsert(vectors,async_req=True)
+    try:
+        pine_index.upsert(vectors,async_req=True)
+    except KeyError: 
+        print(KeyError)

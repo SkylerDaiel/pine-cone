@@ -82,11 +82,9 @@ def answer_question(
 ################################################################################
 ################################################################################
 questions = [
-    'What is the Project Stage Number for Dennis Read?',
-    'When is the install date for Dennis Read?',
-    'Please give me all information for Dennis Read?'
+    'What is the Stage for Ma. Sagrario Castellanos?',
 ]
 
 for question in questions:
     print('question: ',question)
-    print('answer: ', answer_question(question=question, debug=False))
+    print('answer: ', answer_question(question=question, debug=True))
