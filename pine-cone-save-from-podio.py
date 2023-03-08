@@ -64,10 +64,12 @@ def get_items(app_id, limit, offset):
     })['items']
 
 def set_item(id, new_value):
-    if hasattr(new_value, 'Stage'):
+    if hasattr(new_value, 'Stage') & hasattr(new_value, 'Customer Full Name'):
         text= f"Now the stage for {new_value['Customer Full Name']} is {new_value['Stage']}"
-    else:
+    elif hasattr(new_value, 'Stage') == False & hasattr(new_value, 'Customer Full Name'):
         text= f"Now the stage for {new_value['Customer Full Name']} is none"
+    else:
+        return False
     embedding=[]
     try:
         embedding = openai.Embedding.create(input=text, engine=MODEL)['data'][0]['embedding']
@@ -120,7 +122,7 @@ cnt= 0
 
 for offset in tqdm(range(0, total, item_cnt_per_page)):
     cnt+=1
-    if(cnt<46):
+    if(cnt<61):
         continue
     items=get_items(app_id, limit=item_cnt_per_page, offset=offset)
     vectors=[]
@@ -129,6 +131,8 @@ for offset in tqdm(range(0, total, item_cnt_per_page)):
         id=item['item_id']
         values= all_values(item['fields'])
         vector=set_item("id-"+str(id), values)
+        if vector is False:
+            continue
         vectors.append(vector)
         time.sleep(0.001)
         pbar.set_description("Processing %s")
