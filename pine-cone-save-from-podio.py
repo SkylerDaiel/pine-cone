@@ -93,6 +93,7 @@ def set_item(id, new_value):
         embedding = openai.Embedding.create(input=text, engine=MODEL)['data'][0]['embedding']
     except :
         embedding = openai.Embedding.create(input=text, engine=MODEL)['data'][0]['embedding']
+
     new_value['text']=text
     return {
         "id": id,
@@ -137,12 +138,12 @@ item_cnt_per_page=50
 total=podio.Item.filter(int(app_id),attributes={})['total']
 print(total)
 
-cnt= 0
+# cnt= 0
 
 for offset in tqdm(range(0, total, item_cnt_per_page)):
-    cnt+=1
-    if(cnt<710):
-        continue
+    # cnt+=1
+    # if(cnt<710):
+    #     continue
     items=get_items(app_id, limit=item_cnt_per_page, offset=offset)
     vectors=[]
     pbar = tqdm(items)
