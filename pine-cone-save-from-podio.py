@@ -65,12 +65,29 @@ def get_items(app_id, limit, offset):
 
 def set_item(id, new_value):
     text=''
-    if ('Stage' in new_value) & ('Customer Full Name' in new_value):
-        text= f"Now the stage for {new_value['Customer Full Name']} is {new_value['Stage']}"
-    elif ('Stage' in new_value == False) & ('Customer Full Name' in new_value):
-        text= f"Now the stage for {new_value['Customer Full Name']} is none"
-    else:
+    if ('Customer Full Name' in new_value)==False:
         return False
+    
+    text += f"Now the stage for {new_value['Customer Full Name']} is "
+    if ('Stage' in new_value):
+        text += new_value['Stage']
+    else:
+        text += "none"
+    text +="."
+    text += f"And the address of Customer is "
+    if('Property Address' in new_value):
+        text += new_value["Property Address"]
+    else:
+        text += "none"
+    text +="."
+    text += f"The email of Customer is "
+
+    if('Customer Email' in new_value):
+        text += new_value['Customer Email']
+    else:
+        text += "none"
+
+    text+="."
     embedding=[]
     try:
         embedding = openai.Embedding.create(input=text, engine=MODEL)['data'][0]['embedding']
