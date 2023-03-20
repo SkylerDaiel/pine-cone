@@ -73,13 +73,13 @@ def set_item(id, new_value):
         text += new_value['Stage']
     else:
         text += "none"
-    text +="."
+    text +=". "
     text += f"And the address of Customer is "
     if('Property Address' in new_value):
         text += new_value["Property Address"]
     else:
         text += "none"
-    text +="."
+    text +=". "
     text += f"The email of Customer is "
 
     if('Customer Email' in new_value):
@@ -87,7 +87,7 @@ def set_item(id, new_value):
     else:
         text += "none"
 
-    text+="."
+    text+=". "
     embedding=[]
     try:
         embedding = openai.Embedding.create(input=text, engine=MODEL)['data'][0]['embedding']
