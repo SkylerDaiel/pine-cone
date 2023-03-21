@@ -68,39 +68,41 @@ def set_item(id, new_value):
     text=''
     if ('Customer Full Name' in new_value)==False:
         return False
-    
-    text += f"Now the stage for {new_value['Customer Full Name']} is "
+    text += f"The customer's name is {new_value['Customer Full Name']}. "
+
+    text += f"Now the stage of project is "
     if ('Stage' in new_value):
         text += new_value['Stage']
     else:
         text += "none"
     text +=". "
-    text += f"And the address of {new_value['Customer Full Name']} is "
+
+    text += f"And the address of customer is "
     if('Property Address' in new_value):
         text += new_value["Property Address"]
     else:
         text += "none"
     text +=". "
-    text += f"The email of {new_value['Customer Full Name']} is "
+    text += f"The email of customer is "
 
     if('Customer Email' in new_value):
         text += new_value['Customer Email']
     else:
         text += "none"
-
     text+=". "
+    
     embedding=[]
     try:
         embedding = openai.Embedding.create(input=text, engine=MODEL)['data'][0]['embedding']
     except :
         embedding = openai.Embedding.create(input=text, engine=MODEL)['data'][0]['embedding']
-
     new_value['text']=text
-    return {
+    
+    pine_index.upsert(vectors=[{
         "id": id,
-        "values": embedding,
-        "metadata": new_value
-    }
+        'values': embedding,
+        'metadata': new_value
+    }],async_req=True)
 
 
 def all_values(fields):
