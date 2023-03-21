@@ -75,13 +75,13 @@ def set_item(id, new_value):
     else:
         text += "none"
     text +=". "
-    text += f"And the address of Customer is "
+    text += f"And the address of {new_value['Customer Full Name']} is "
     if('Property Address' in new_value):
         text += new_value["Property Address"]
     else:
         text += "none"
     text +=". "
-    text += f"The email of Customer is "
+    text += f"The email of {new_value['Customer Full Name']} is "
 
     if('Customer Email' in new_value):
         text += new_value['Customer Email']
@@ -159,5 +159,5 @@ for offset in tqdm(range(0, total, item_cnt_per_page)):
         pbar.set_description("Processing %s")
     try:
         pine_index.upsert(vectors,async_req=True)
-    except KeyError: 
-        print(KeyError)
+    except Exception as error: 
+        print(error)
