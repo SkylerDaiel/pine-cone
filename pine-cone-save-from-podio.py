@@ -98,11 +98,11 @@ def set_item(id, new_value):
         embedding = openai.Embedding.create(input=text, engine=MODEL)['data'][0]['embedding']
     new_value['text']=text
     
-    pine_index.upsert(vectors=[{
+    return {
         "id": id,
-        'values': embedding,
-        'metadata': new_value
-    }],async_req=True)
+        "values": embedding,
+        "metadata": new_value
+    }
 
 
 def all_values(fields):
