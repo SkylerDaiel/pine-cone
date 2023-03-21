@@ -60,7 +60,8 @@ def get_items(app_id, limit, offset):
     return podio.Item.filter(int(app_id),attributes={
         "limit": limit,
         "offset": offset,
-        "sort_by": "created_on",
+        "sort_by": "last_edit_on",
+        "sort_desc": True,
     })['items']
 
 def set_item(id, new_value):
