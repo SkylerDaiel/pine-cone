@@ -54,15 +54,39 @@ app_token=os.getenv("PODIO_APP_TOKEN")
 
 podio = podio_api.OAuthAppClient(client_id,client_secret,app_id,app_token)
 
+max_cycle_cnt=6
 print('start training')
 
-def get_items(app_id, limit, offset):
-    return podio.Item.filter(int(app_id),attributes={
-        "limit": limit,
-        "offset": offset,
-        "sort_by": "created_on",
-        "sort_desc": False,
-    })['items']
+def get_items(app_id, limit, offset, cycle_cnt=0):
+    try:
+        return podio.Item.filter(int(app_id),attributes={
+            "limit": limit,
+            "offset": offset,
+            "sort_by": "created_on",
+            "sort_desc": False,
+        })['items']
+    except Exception as error:
+        if(cycle_cnt>max_cycle_cnt):
+            return False
+        print("error when get item from podio :\n", error)
+        return get_items(app_id, limit, offset, cycle_cnt+1)
+
+def str_embedding(text, cycle_cnt=0):
+    try:
+        return openai.Embedding.create(input=text, engine=MODEL)['data'][0]['embedding']
+    except Exception as error:
+        if(cycle_cnt>max_cycle_cnt):
+            return False
+        print(error)
+        return str_embedding(text, cycle_cnt+1)
+
+def upsert_pinecone(vectors, cycle_cnt=0):
+    try:
+        pine_index.upsert(vectors ,async_req=True)
+    except Exception as error:
+        if(cycle_cnt>max_cycle_cnt):
+            return False
+        upsert_pinecone(vectors, cycle_cnt+1)
 
 def set_item(id, new_value):
     text=''
@@ -91,11 +115,7 @@ def set_item(id, new_value):
         text += "none"
     text+=". "
     
-    embedding=[]
-    try:
-        embedding = openai.Embedding.create(input=text, engine=MODEL)['data'][0]['embedding']
-    except :
-        embedding = openai.Embedding.create(input=text, engine=MODEL)['data'][0]['embedding']
+    embedding = str_embedding(text)
     new_value['text']=text
     
     return {
@@ -166,7 +186,5 @@ for offset in tqdm(range(0, total, item_cnt_per_page)):
         vectors.append(vector)
         time.sleep(0.001)
         pbar.set_description("Processing %s")
-    try:
-        pine_index.upsert(vectors,async_req=True)
-    except Exception as error: 
-        print(error)
+        
+    upsert_pinecone(vector)
