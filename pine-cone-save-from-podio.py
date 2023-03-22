@@ -186,5 +186,5 @@ for offset in tqdm(range(0, total, item_cnt_per_page)):
         vectors.append(vector)
         time.sleep(0.001)
         pbar.set_description("Processing %s")
-        
-    upsert_pinecone(vector)
+
+    upsert_pinecone(vectors)
