@@ -108,33 +108,40 @@ def set_item(id, new_value):
 def all_values(fields):
     values={}
     for field in fields:
-        match(field['type']):
-            case 'app':
-                values[field['label']]=None
-            case 'category':
+        match(fields['label']):
+            case 'Customer Full Name' | 'Customer Email' | 'Property Address':
+                values[field['label']]=field['values'][0]['value']
+            case 'Stage':
                 values[field['label']]=field['values'][0]['value']['text']
-            case 'date':
-                values[field['label']]=field['values'][0]['start']
-            case 'embed':
-                values[field['label']]=field['values'][0]['embed']['url']
             case default:
-                values[field['label']]=retrun_values(field)
+                continue
+        # match(field['type']):
+        #     case 'app':
+        #         values[field['label']]=None
+        #     case 'category':
+        #         values[field['label']]=field['values'][0]['value']['text']
+        #     case 'date':
+        #         values[field['label']]=field['values'][0]['start']
+        #     case 'embed':
+        #         values[field['label']]=field['values'][0]['embed']['url']
+        #     case default:
+        #         values[field['label']]=retrun_values(field)
     # print(values)
     return values
 
-def retrun_values(field):
-    # print(field['label'],field['type'], ' :',field['values'][0])
-    match(field['label']):
-        case "Date Created" | "? Install Complete Date" | "MTRX NTP Approved Date" | "CCA Date":
-            return field['values'][0]['start']
-        # case "Stage" | "Warehouse territory" | "Status" | "? MTRX Install Status" | "Finance Type" | "Deal Status (Sales)" | "Welcome Call Checklist" | "HOA Approval Required?":
-        #     return field['values'][0]['value']['text']
-        case "Project Manager":
-            return field['values'][0]['value']['name']
-        case "Metrics" | "Sales Item":
-            return None
-        case default:
-            return field['values'][0]['value']
+# def retrun_values(field):
+#     # print(field['label'],field['type'], ' :',field['values'][0])
+#     match(field['label']):
+#         case "Date Created" | "? Install Complete Date" | "MTRX NTP Approved Date" | "CCA Date":
+#             return field['values'][0]['start']
+#         # case "Stage" | "Warehouse territory" | "Status" | "? MTRX Install Status" | "Finance Type" | "Deal Status (Sales)" | "Welcome Call Checklist" | "HOA Approval Required?":
+#         #     return field['values'][0]['value']['text']
+#         case "Project Manager":
+#             return field['values'][0]['value']['name']
+#         case "Metrics" | "Sales Item":
+#             return None
+#         case default:
+#             return field['values'][0]['value']
         
 page_cnt=0
 item_cnt_per_page=50
