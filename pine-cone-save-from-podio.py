@@ -108,7 +108,7 @@ def set_item(id, new_value):
 def all_values(fields):
     values={}
     for field in fields:
-        match(fields['label']):
+        match(field['label']):
             case 'Customer Full Name' | 'Customer Email' | 'Property Address':
                 values[field['label']]=field['values'][0]['value']
             case 'Stage':
@@ -148,12 +148,12 @@ item_cnt_per_page=50
 total=podio.Item.filter(int(app_id),attributes={})['total']
 print(total)
 
-cnt= 0
+# cnt= 0
 
 for offset in tqdm(range(0, total, item_cnt_per_page)):
-    cnt+=1
-    if(cnt<600):
-        continue
+    # cnt+=1
+    # if(cnt<600):
+    #     continue
     items=get_items(app_id, limit=item_cnt_per_page, offset=offset)
     vectors=[]
     pbar = tqdm(items)
