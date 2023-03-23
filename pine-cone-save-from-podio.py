@@ -62,8 +62,10 @@ def get_items(app_id, limit, offset, cycle_cnt=0):
         return podio.Item.filter(int(app_id),attributes={
             "limit": limit,
             "offset": offset,
-            "sort_by": "created_on",
-            "sort_desc": False,
+            # "sort_by": "created_on",
+            # "sort_desc": False,
+            "sort_by": "last_edit_on",
+            "sort_desc": True,
         })['items']
     except Exception as error:
         if(cycle_cnt>max_cycle_cnt):
@@ -172,8 +174,10 @@ cnt= 0
 
 for offset in tqdm(range(0, total, item_cnt_per_page)):
     cnt+=1
-    if(cnt<950):
-        continue
+    # if(cnt<950):
+    #     continue
+    if(cnt>100):
+        break
     items=get_items(app_id, limit=item_cnt_per_page, offset=offset)
     vectors=[]
     pbar = tqdm(items)
