@@ -232,8 +232,6 @@ for offset in tqdm(range(0, total, item_cnt_per_page)):
         if item["comment_count"] != 0:
             item = get_item_from_podio(id)
             comments_data = handle_comments(comments=item["comments"])
-        # json_formatted_str = json.dumps(comments_data, indent=2)
-        # print(json_formatted_str)
         values = all_values(item["fields"])
         vector = set_item("id-" + str(id), values, comments_data)
         if vector is False:
@@ -241,4 +239,6 @@ for offset in tqdm(range(0, total, item_cnt_per_page)):
         vectors.append(vector)
         time.sleep(0.01)
         pbar.set_description("Processing %s")
+    json_formatted_str = json.dumps(vectors, indent=2)
+    print(json_formatted_str)
     upsert_pinecone(vectors)
