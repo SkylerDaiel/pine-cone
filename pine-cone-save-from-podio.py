@@ -160,13 +160,13 @@ def set_item(id, new_values={}, comments=[]):
 def all_values(fields):
     values = {}
     for field in fields:
-        match (field["label"]):
-            case "Customer Full Name" | "Customer Email" | "Property Address":
-                values[field["label"]] = field["values"][0]["value"]
-            case "Stage":
-                values[field["label"]] = field["values"][0]["value"]["text"]
-            case default:
-                continue
+        # match (field["label"]):
+        #     case "Customer Full Name" | "Customer Email" | "Property Address":
+        #         values[field["label"]] = field["values"][0]["value"]
+        #     case "Stage":
+        #         values[field["label"]] = field["values"][0]["value"]["text"]
+        #     case default:
+        #         continue
         match (field["type"]):
             case "app":
                 values[field["label"]] = None
